@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "lttviet-live": {
+      "hosting": {
+        "LiveAngular": [
+          "lttviet-live"
+        ]
+      }
+    }
+  }
+}
