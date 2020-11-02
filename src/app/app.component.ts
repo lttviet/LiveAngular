@@ -12,8 +12,8 @@ import { ChannelService } from './channel.service';
 })
 export class AppComponent implements OnInit {
   title = 'LiveAngular';
-  apiChannels: Observable<Channel[]>;
-  firebaseChannels: Observable<Channel[]>;
+  apiChannels: Channel[];
+  firebaseChannels: Channel[];
 
   constructor(
     private channelService: ChannelService,
@@ -26,12 +26,24 @@ export class AppComponent implements OnInit {
   }
 
   private getAPIChannels(): void {
-    this.apiChannels = this.channelService.getChannels();
+    this.channelService.getChannels()
+      .subscribe(channels => this.apiChannels = channels);
   }
 
   private getFirestoreChannels(): void {
-    this.firebaseChannels = this.firestore
+    this.firestore
       .collection<Channel>('channels')
-      .valueChanges({ idField: 'id' });
+      .valueChanges({ idField: 'id' })
+      .subscribe(channels => this.firebaseChannels = channels);
+  }
+
+  add(name: string): void {
+    name = name.trim();
+    if (!name) {
+      return;
+    }
+
+    this.channelService.addChannel({name} as Channel)
+      .subscribe(channel => this.apiChannels.push(channel));
   }
 }

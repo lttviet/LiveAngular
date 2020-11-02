@@ -26,6 +26,15 @@ export class ChannelService {
       .pipe(catchError(this.handleError<Channel>('getChannel')));
   }
 
+  addChannel(channel: Channel): Observable<Channel> {
+    return this.http
+      .post<Channel>(this.liveAPI, channel)
+      .pipe(
+        tap((newChannel: Channel) => console.log(`Added channel id=${newChannel.id}`)),
+        catchError(this.handleError<Channel>('addChannel'))
+      );
+  }
+
   private handleError<T>(
     operation = 'operation',
     result?: T
